@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Route, useHistory } from 'react-router-dom';
 import Footer from "./Footer";
 import Header from "./Header";
 import Main from "./Main";
@@ -8,8 +9,13 @@ import EditProfilePopup from "./EditProfilePopup";
 import ImagePopup from "./ImagePopup";
 import PopupWithForm from "./PopupWithForm";
 import DeleteCardPopup from "./DeleteCardPopup"
+import Login from "./Login";
+import ProtectedRoute from "./ProtectedRoute";
+import auth from '../utils/auth';
+import { signIn } from '../utils/auth';
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utils/Api";
+
 
 // css
 import "../index.css";
@@ -36,6 +42,10 @@ function App() {
   });
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const history = useHistory();
+  
+
 
   const handleAddPlaceSubmit = (name, link) => {
     setIsLoading(true);
@@ -114,6 +124,21 @@ function App() {
       link: card.link,
     });
   };
+
+  const handleLogin = ({email, password}) =>{
+    signIn(email, password)
+    .then(res =>{
+      if(res.token){
+        setIsLoggedIn(true);
+        localStorage.setItem('jwt', res.token);
+        history.pushState('/main');
+        console.log("sucess app>login()")
+      }else{
+        console.log("something went wrong in app/handleLogin");
+      }
+    })
+  }
+
   useEffect(() => {
     const closeByEscape = (e) => {
       if (e.key === 'Escape') {
@@ -144,10 +169,27 @@ function App() {
       .catch(console.log);
   }, []);
 
+  useEffect(() =>{
+    const token = localStorage.getItem('token')
+    if(token){
+      auth.checkTocken(token).then(res =>{
+        const { data:{_id, email} } = res
+        setCurrentUser({ _id ,email})
+        history.pushState('/main');
+      })
+    }
+  },[])
+
   return (
     <div className="body">
       <CurrentUserContext.Provider value={currentUser}>
         <Header />
+       
+        <ProtectedRoute
+             path="/around-react"
+            isLoggedIn={isLoggedIn}
+          >
+          
         <Main
           cards={cards}
           onEditAvatarClick={handleEditAvatarClick}
@@ -157,6 +199,11 @@ function App() {
           onCardLike={handleCardLike}
           onCardDelete={handleDeleteButtonClick}
         />
+        </ProtectedRoute>
+        <Route path="/signin">
+            <Login handleLogin={handleLogin} />
+          </Route>
+          
         <Footer />
 
         <PopupWithForm

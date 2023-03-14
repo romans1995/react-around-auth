@@ -1,11 +1,9 @@
-import React, { useRef ,useEffect} from 'react';
+import React, { useRef } from 'react';
 import PopupWithForm from "./PopupWithForm";
 
 
 
 const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar, isLoading }) => {
-
-  
 
   const url = useRef();
   function handleSubmit(e) {
