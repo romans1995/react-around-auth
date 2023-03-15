@@ -25,3 +25,13 @@ export const signIn = (email, password) => {
         body: JSON.stringify({ email, password })
     });
 };
+
+export const checkTocken = (token) => {
+    return customFetch(`${BASE_URL}/users/me`, {
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+        }
+    })
+};

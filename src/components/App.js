@@ -11,8 +11,8 @@ import PopupWithForm from "./PopupWithForm";
 import DeleteCardPopup from "./DeleteCardPopup"
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
-import auth from '../utils/auth';
-import { signIn } from '../utils/auth';
+// import auth from '../utils/auth';
+import { signIn,checkTocken } from '../utils/auth';
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utils/Api";
 
@@ -125,18 +125,16 @@ function App() {
     });
   };
 
-  const handleLogin = ({email, password}) =>{
+  const handleLogin = (email, password) =>{
     signIn(email, password)
     .then(res =>{
       if(res.token){
         setIsLoggedIn(true);
         localStorage.setItem('jwt', res.token);
-        history.pushState('/main');
+        history.push('/');
         console.log("sucess app>login()")
-      }else{
-        console.log("something went wrong in app/handleLogin");
       }
-    })
+    });
   }
 
   useEffect(() => {
@@ -172,13 +170,13 @@ function App() {
   useEffect(() =>{
     const token = localStorage.getItem('token')
     if(token){
-      auth.checkTocken(token).then(res =>{
+      checkTocken(token).then(res =>{
         const { data:{_id, email} } = res
         setCurrentUser({ _id ,email})
         history.pushState('/main');
       })
     }
-  },[])
+  },[history])
 
   return (
     <div className="body">
