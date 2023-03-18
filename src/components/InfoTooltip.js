@@ -8,7 +8,7 @@ const InfoTooltip = ({ isOpen, onClose, tooltipStatus }) => {
     if (isOpen) {
       const timer = setTimeout(() => {
         onClose();
-      }, 150000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [isOpen, onClose]);

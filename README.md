@@ -1,4 +1,4 @@
-# Project 11: Around The U.S.
+# Project 14: Around The U.S.
 ![The around react app](https://media.discordapp.net/attachments/1008567395658518608/1056618363209650206/image.png?width=881&height=427)
 
 ## project name :Around The U.S.
@@ -16,9 +16,10 @@
 
 # description
 
-<p>In this project I did some html and Css design for the 10 project via figma</p>
+<p>In this project I did some html and Css design for the 14 project via figma</p>
 <p>the validation will make sure you enter everything correctly </p>
 <p>And you can like pictures and see how much likes every picture got </p>
+<p>You need to registar to login</p>
 <p>You can edit your name and picture </p>
 <p>you can exit with esc </p>
 
