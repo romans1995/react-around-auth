@@ -40,6 +40,7 @@ button.login-form__submit-button {
     height: 50px;
     border-radius: 2px;
     background: #FFFFFF;
+    cursor: pointer;
 }
 
 p.login-form__footer-text {
@@ -55,4 +56,9 @@ p.login-form__footer-text {
 a.login-form__footer-link {
     color: #FFFFFF;
     text-decoration: none;
+}
+
+img.tooltip__image {
+    margin: 0 auto;
+    display: block;
 }

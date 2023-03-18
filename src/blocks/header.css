@@ -10,6 +10,18 @@
     padding-top: 45px;
 }
 
+p.header__link.header__button {
+    background: transparent;
+    color: #A9A9A9;
+    font-weight: 400;
+    font-size: 18px;
+    font-family: 'Inter';
+    font-style: normal;
+    float: right;
+    padding-top: 45px;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 565px) {
     .header {
         padding-bottom: 41px;
