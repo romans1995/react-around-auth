@@ -1,28 +1,29 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 
 
-const Login = ({handleLogin}) =>{
-  const [userLoginInfo, setUserLoginInfo] =useState({
-    email:"",
-    password:""
+const Login = ({ handleLogin }) => {
+  const [userLoginInfo, setUserLoginInfo] = useState({
+    email: "",
+    password: ""
   });
 
-      const handleChange = (e) => {
-        const { name, value } = e.target;
-       setUserLoginInfo({...userLoginInfo,
-        [name]: value,
-        })
-      }
-    
-       const handleSubmit = (e) => {
-        e.preventDefault();
-        const { email, password } = userLoginInfo;
-        handleLogin(email,password);
-      }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserLoginInfo({
+      ...userLoginInfo,
+      [name]: value,
+    })
+  }
 
-      return(
-        <div className="login-form" height="80" width="80" color="#fff">
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { email, password } = userLoginInfo;
+    handleLogin(email, password);
+  }
+
+  return (
+    <div className="login-form" height="80" width="80" color="#fff">
       <h2 className="login-form__title">Log in</h2>
       <form className="login-form__form" onSubmit={handleSubmit}>
         <input
@@ -57,7 +58,7 @@ const Login = ({handleLogin}) =>{
         </div>
       </form>
     </div>
-)
+  )
 
 }
 export default Login;

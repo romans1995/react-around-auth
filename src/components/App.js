@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Redirect, Route, useHistory, Switch } from 'react-router-dom';
+import { Redirect, Route, useHistory, Switch } from 'react-router-dom';
 import Footer from "./Footer";
 import Header from "./Header";
 import Main from "./Main";
@@ -50,7 +50,7 @@ function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [tooltipStatus, setTooltipStatus] = useState(false);
   const [token, setToken] = useState(localStorage.getItem('token'));
-  
+
 
 
   const handleAddPlaceSubmit = (name, link) => {
@@ -140,18 +140,18 @@ function App() {
           localStorage.setItem('token', res.token);
           setUserEmail(email);
           history.push('/around-react');
-        }else {
+        } else {
           setTooltipStatus(false);
           setIsInfoTooltipOpen(true);
         }
       })
       .catch((err) => {
+        console.log(err);
         setTooltipStatus(false);
         setIsInfoTooltipOpen(true);
-      });
+      }).finally(setIsInfoTooltipOpen(true));
   }
   const handleRegister = (email, password) => {
-    console.log(email, password);
     signUp(email, password)
       .then(res => {
         if (res.data._id) {
@@ -161,7 +161,7 @@ function App() {
           setTooltipStatus(false);
           history.push('/signup')
         }
-      }).catch(console.log).finally(setIsInfoTooltipOpen(true));
+      }).catch(err => console.log(err)).finally(setIsInfoTooltipOpen(true));
   }
 
   useEffect(() => {
@@ -195,7 +195,7 @@ function App() {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       checkTocken(token).then(res => {
-          setIsLoggedIn(true);
+        setIsLoggedIn(true);
         setUserEmail(res.data.email)
         history.push('/');
       }).catch((err) => {
@@ -208,14 +208,14 @@ function App() {
           setIsCheckToken(false);
         });
     }
-  }, [isLoggedIn,history,token])
+  }, [isLoggedIn, history, token])
 
-  
+
 
   return (
-   <div className="body">
+    <div className="body">
       <CurrentUserContext.Provider
-        value={{currentUser:currentUser ,userEmail:userEmail}}>
+        value={{ currentUser: currentUser, userEmail: userEmail }}>
         <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userEmail={userEmail} />
         <Switch>
           <ProtectedRoute
@@ -242,9 +242,9 @@ function App() {
             <Register handleRegister={handleRegister} />
           </Route>
           <Route>
-            {isLoggedIn ? 
+            {isLoggedIn ?
               <Redirect to="/around-react" />
-             :
+              :
               <Redirect to="/signin" />
             }
           </Route>
