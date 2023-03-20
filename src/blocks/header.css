@@ -35,6 +35,20 @@ p.header__link.header__button {
     gap: 10px;
 }
 
+a.header__redirect-text {
+    position: absolute;
+    width: 64px;
+    height: 22px;
+    top: 51px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    color: #FFFFFF;
+    text-decoration: unset;
+}
+
 @media screen and (max-width: 565px) {
     .header {
         padding-bottom: 41px;

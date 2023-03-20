@@ -59,7 +59,7 @@ function App() {
       setCards([newCard, ...cards]);
       closeAllPopups();
     }).catch(console.log)
-      .finally(setIsLoading(false));
+      .finally(() => setIsLoading(false));
   }
 
   function handleCardLike(card) {
@@ -149,7 +149,7 @@ function App() {
         console.log(err);
         setTooltipStatus(false);
         setIsInfoTooltipOpen(true);
-      }).finally(setIsInfoTooltipOpen(true));
+      });
   }
   const handleRegister = (email, password) => {
     signUp(email, password)
@@ -161,7 +161,7 @@ function App() {
           setTooltipStatus(false);
           history.push('/signup')
         }
-      }).catch(err => console.log(err)).finally(setIsInfoTooltipOpen(true));
+      }).catch(err => console.log(err)).finally(() => setIsInfoTooltipOpen(true));
   }
 
   // useEffect section 
@@ -203,7 +203,6 @@ function App() {
         console.log(err);
         history.push('/signin');
         setIsLoggedIn(false);
-        console.log("failed EseEffect")
       })
         .finally(() => {
           setIsCheckToken(false);

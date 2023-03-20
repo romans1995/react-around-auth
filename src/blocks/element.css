@@ -91,12 +91,14 @@
     .element__like-button_active {
         background-image: url(../images/icons/heart_icon-filled.svg);
     }
+    
     .element__like-countainer {
         display: flex;
         flex-direction: column;
         align-items: stretch;
     }
-   .element__likes-count {
+    
+    .element__likes-count {
         margin: 0 auto;
     }
     

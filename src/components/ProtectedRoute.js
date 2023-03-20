@@ -8,7 +8,6 @@ const ProtectedRoute = ({ children,ischeckToken, isLoggedIn, ...props }) => {
     {  children }
   </Route> 
     :<Redirect to={"/signin"} />
-
 )}
 
 export default ProtectedRoute; 

@@ -3,7 +3,6 @@ const customFetch = (url, heasders) => {
     return fetch(url, heasders).then(res => res.ok ? res.json() : Promise.reject(res.statusText));
 }
 
-
 export const signUp = (email, password) => {
     return customFetch(`${BASE_URL}/signup`, {
         method: "POST",
