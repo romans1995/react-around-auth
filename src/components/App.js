@@ -193,30 +193,23 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt');
-    if (token) {
+    if (localStorage.getItem("token")) {
       checkTocken(token).then(res => {
-      setIsLoggedIn(true);
+          setIsLoggedIn(true);
         setUserEmail(res.data.email)
-        history.push('/around-react');
-        api.setUserInfo({email:res.data.email})
+        history.push('/');
       }).catch((err) => {
         console.log(err);
         history.push('/signin');
         setIsLoggedIn(false);
+        console.log("failed EseEffect")
       })
         .finally(() => {
           setIsCheckToken(false);
         });
     }
-  }, [history])
+  }, [isLoggedIn,history,token])
 
-  useEffect(() => {
-    if (token) {
-      setIsLoggedIn(true)
-      setIsCheckToken(true)
-    }
-    },[])
   
 
   return (
@@ -229,6 +222,7 @@ function App() {
             path="/around-react"
             isLoggedIn={isLoggedIn}
             ischeckToken={ischeckToken}
+            setIsLoggedIn={setIsLoggedIn}
           >
 
             <Main
@@ -248,11 +242,11 @@ function App() {
             <Register handleRegister={handleRegister} />
           </Route>
           <Route>
-            {isLoggedIn ? (
+            {isLoggedIn ? 
               <Redirect to="/around-react" />
-            ) : (
-              <Redirect to="/signup" />
-            )}
+             :
+              <Redirect to="/signin" />
+            }
           </Route>
         </Switch>
         <Footer />

@@ -3,8 +3,8 @@ import { Route, Redirect } from 'react-router-dom';
 
 const ProtectedRoute = ({ children,ischeckToken, isLoggedIn, ...props }) => {
   // const isRenderSpinner = ischeckToken // true
-  return(isLoggedIn?
-    <Route path="/around-react" {...props}>
+  return(localStorage.getItem("token")?
+    <Route {...props}>
     {  children }
   </Route> 
     :<Redirect to={"/signin"} />
