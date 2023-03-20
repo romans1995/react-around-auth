@@ -3,6 +3,8 @@
     margin: 0 auto;
     padding-bottom: 41px;
     border-bottom: 1px solid rgba(84, 84, 84, 0.7);
+    display: flex;
+    justify-content: space-between;
 }
 
 .header__logo {
@@ -20,6 +22,17 @@ p.header__link.header__button {
     float: right;
     padding-top: 45px;
     cursor: pointer;
+}
+
+.header__div {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    float: right;
+    padding-top: 45px;
+    justify-content: space-between;
+    gap: 10px;
 }
 
 @media screen and (max-width: 565px) {

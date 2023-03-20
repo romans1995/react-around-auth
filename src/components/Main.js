@@ -13,29 +13,27 @@ const Main = ({
    
 }) => {
   
-  
-
   const currentUser = useContext(CurrentUserContext);
   return (
     <main className="main">
       <section className="profile">
         <div onClick={onEditAvatarClick} className="profile__img-container">
           <img
-            src={currentUser.avatar}
+            src={currentUser.currentUser.avatar}
             className="profile__img"
             alt="profile img"
           />
         </div>
         <div className="profile__description">
           <div className="profile__description-button">
-            <h1 className="profile__description-name"> {currentUser.name} </h1>
+            <h1 className="profile__description-name"> {currentUser.currentUser.name} </h1>
             <button
               onClick={onEditProfileClick}
               className="profile__edit"
               type="button"
             />
           </div>
-          <p className="profile__description-prof"> {currentUser.about} </p>
+          <p className="profile__description-prof"> {currentUser.currentUser.about} </p>
         </div>
         <button
           className="profile__add"

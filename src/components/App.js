@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, useHistory,Redirect,Switch } from 'react-router-dom';
+import {Redirect, Route, useHistory, Switch } from 'react-router-dom';
 import Footer from "./Footer";
 import Header from "./Header";
 import Main from "./Main";
@@ -13,10 +13,10 @@ import Login from "./Login";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
 // import auth from '../utils/auth';
-import { signIn,checkTocken,signUp} from '../utils/auth';
+import { signIn, checkTocken, signUp } from '../utils/auth';
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utils/Api";
-import InfoTooltip  from "./InfoTooltip";
+import InfoTooltip from "./InfoTooltip";
 
 // css
 import "../index.css";
@@ -42,22 +42,24 @@ function App() {
     link: "",
   });
   const [cards, setCards] = useState([]);
+  const [userEmail, setUserEmail] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const history = useHistory();
-  const [ischeckToken,setIsCheckToken]=useState(true);
+  const [ischeckToken, setIsCheckToken] = useState(true);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [tooltipStatus, setTooltipStatus] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('token'));
   
 
 
   const handleAddPlaceSubmit = (name, link) => {
     setIsLoading(true);
     api.createCard({ name, link }).then((newCard) => {
-      setIsLoading(false);
       setCards([newCard, ...cards]);
       closeAllPopups();
-    }).catch(console.log);
+    }).catch(console.log)
+      .finally(setIsLoading(false));
   }
 
   function handleCardLike(card) {
@@ -130,31 +132,37 @@ function App() {
     });
   };
 
-  const handleLogin = (email, password) =>{
+  const handleLogin = (email, password) => {
     signIn(email, password)
-    .then(res =>{
-      if(res.token){
-        setIsLoggedIn(true);
-        localStorage.setItem('token', res.token);
-        history.push('/around-react');
-      }
-    });
-  }
-  const handleRegister = (email, password) =>{
-    console.log(email, password);
-    signUp(email, password)
-    .then(res =>{
-      if (res.data._id) {
-        setTooltipStatus(true);
-        setIsInfoTooltipOpen(true);
-        history.push('/signin');
-      } else {
+      .then(res => {
+        if (res.token) {
+          setIsLoggedIn(true);
+          localStorage.setItem('token', res.token);
+          setUserEmail(email);
+          history.push('/around-react');
+        }else {
+          setTooltipStatus(false);
+          setIsInfoTooltipOpen(true);
+        }
+      })
+      .catch((err) => {
         setTooltipStatus(false);
         setIsInfoTooltipOpen(true);
-        history.push('/signup')
-      }
-      })
-    }
+      });
+  }
+  const handleRegister = (email, password) => {
+    console.log(email, password);
+    signUp(email, password)
+      .then(res => {
+        if (res.data._id) {
+          setTooltipStatus(true);
+          history.push('/signin');
+        } else {
+          setTooltipStatus(false);
+          history.push('/signup')
+        }
+      }).catch(console.log).finally(setIsInfoTooltipOpen(true));
+  }
 
   useEffect(() => {
     const closeByEscape = (e) => {
@@ -162,11 +170,9 @@ function App() {
         closeAllPopups();
       }
     }
-
     document.addEventListener('keydown', closeByEscape)
-
     return () => document.removeEventListener('keydown', closeByEscape)
-  }, [])
+  }, []);
 
 
   useEffect(() => {
@@ -186,63 +192,69 @@ function App() {
       .catch(console.log);
   }, []);
 
-  useEffect(() =>{
-    const token = localStorage.getItem('jwt')
-    if(token){
+  useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      checkTocken(token).then(res => {
       setIsLoggedIn(true);
-      checkTocken(token).then(res =>{
-        const { data:{_id, email} } = res;
-        setCurrentUser({ _id ,email});
-       
+        setUserEmail(res.data.email)
         history.push('/around-react');
+        api.setUserInfo({email:res.data.email})
       }).catch((err) => {
         console.log(err);
         history.push('/signin');
+        setIsLoggedIn(false);
       })
-      .finally(() => {
-        setIsCheckToken(false);
-      });
+        .finally(() => {
+          setIsCheckToken(false);
+        });
     }
-  },[history])
+  }, [history])
+
+  useEffect(() => {
+    if (token) {
+      setIsLoggedIn(true)
+      setIsCheckToken(true)
+    }
+    },[])
+  
 
   return (
-    <div className="body">
-      
+   <div className="body">
       <CurrentUserContext.Provider
-       value={currentUser}>
-        <Header  isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  />
+        value={{currentUser:currentUser ,userEmail:userEmail}}>
+        <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userEmail={userEmail} />
         <Switch>
-        <ProtectedRoute
-             path="/around-react"
+          <ProtectedRoute
+            path="/around-react"
             isLoggedIn={isLoggedIn}
             ischeckToken={ischeckToken}
           >
-          
-        <Main
-          cards={cards}
-          onEditAvatarClick={handleEditAvatarClick}
-          onEditProfileClick={handleEditProfileClick}
-          onAddPlaceClick={handleAddPlaceClick}
-          handleCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleDeleteButtonClick}
-        />
-        </ProtectedRoute>
-        <Route path="/signin">
+
+            <Main
+              cards={cards}
+              onEditAvatarClick={handleEditAvatarClick}
+              onEditProfileClick={handleEditProfileClick}
+              onAddPlaceClick={handleAddPlaceClick}
+              handleCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleDeleteButtonClick}
+            />
+          </ProtectedRoute>
+          <Route path="/signIn">
             <Login handleLogin={handleLogin} />
           </Route>
           <Route path="/signup">
-            <Register handleRegister={handleRegister}/>
+            <Register handleRegister={handleRegister} />
           </Route>
-        </Switch>
-        
           <Route>
             {isLoggedIn ? (
               <Redirect to="/around-react" />
             ) : (
-              <Redirect to="/signIn" />
+              <Redirect to="/signup" />
             )}
           </Route>
+        </Switch>
         <Footer />
         <PopupWithForm
           title="Are you sure?"

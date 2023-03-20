@@ -1,8 +1,14 @@
+// Roman
 import logo from "../images/logo.svg";
 import React from "react";
 import {useHistory} from 'react-router-dom';
+// import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function Header({isLoggedIn,setIsLoggedIn}) {
+
+
+function Header({isLoggedIn,setIsLoggedIn,userEmail}) {
+// const isLoggedinContext = useContext(CurrentUserContext);
+// console.log("heasder",isLoggedinContext)
   const history = useHistory();
   function signOut (){
     localStorage.removeItem("token");
@@ -13,7 +19,12 @@ function Header({isLoggedIn,setIsLoggedIn}) {
   return (
     <header className="header">
       <img src={logo} alt="Logo" className="header__logo" />
-      {isLoggedIn ?<p className="header__link header__button" onClick={signOut}>Log out</p>:""}
+      {isLoggedIn ?
+      <div className="header__div">
+        <p className="header__link header__button" onClick={signOut}>Log out</p>
+        <p className="header__email header__button">{userEmail}</p>
+      </div>
+      :""}
     </header>
   );
 }

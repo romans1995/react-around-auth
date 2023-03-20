@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Link } from 'react-router-dom';
+
 
 const Login = ({handleLogin}) =>{
   const [userLoginInfo, setUserLoginInfo] =useState({
     email:"",
     password:""
   });
- 
 
       const handleChange = (e) => {
         const { name, value } = e.target;
@@ -20,9 +20,8 @@ const Login = ({handleLogin}) =>{
         const { email, password } = userLoginInfo;
         handleLogin(email,password);
       }
-      
-      
-return(
+
+      return(
         <div className="login-form" height="80" width="80" color="#fff">
       <h2 className="login-form__title">Log in</h2>
       <form className="login-form__form" onSubmit={handleSubmit}>
