@@ -29,7 +29,7 @@ import "../blocks/element.css";
 import "../blocks/popup.css";
 import "../blocks/footer.css";
 
-
+// Main statements section 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -164,6 +164,7 @@ function App() {
       }).catch(err => console.log(err)).finally(setIsInfoTooltipOpen(true));
   }
 
+  // useEffect section 
   useEffect(() => {
     const closeByEscape = (e) => {
       if (e.key === 'Escape') {
